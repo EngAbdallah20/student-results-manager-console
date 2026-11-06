@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>نظام إدارة وتحليل نتائج الطلاب</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 30px;
+      background: #eaf2ff;
+      color: #263238;
+      font-family: Arial, sans-serif;
+    }
+
+    main {
+      max-width: 700px;
+      margin: 45px auto;
+      padding: 25px;
+      border: 2px solid #5b8fd1;
+      border-radius: 10px;
+      background: white;
+    }
+
+    h1 {
+      color: #245d9c;
+    }
+
+    p {
+      line-height: 1.8;
+    }
+
+    .note {
+      padding: 12px;
+      border-right: 4px solid #41a57b;
+      background: #e8f7ef;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>نظام إدارة وتحليل نتائج الطلاب</h1>
+    <p>الصفحة تشغّل حساب متوسطات الطلاب ولجنة الرأفة.</p>
+    <p class="note">لعرض التقرير افتح أدوات المطوّر بـ F12 ثم اختر Console.</p>
+    <p>لو مشتغلش اضغط زر Fn قبل F12</p>
+  </main>
+
+  <script>
+    'use strict';
+
+    class Student {
+      constructor(id, name, grades, attendance) {
+        this.id = id;
+        this.name = name;
+        this.grades = grades;
+        this.attendance = attendance;
+      }
+
+      calculateAverage() {
+        const totalGrades = this.grades.reduce((sum, grade) => sum + grade, 0);
+        return totalGrades / this.grades.length;
+      }
+
+      getLetterGrade(average) {
+        if (average >= 90) return 'A';
+        else if (average >= 80) return 'B';
+        else if (average >= 70) return 'C';
+        else if (average >= 60) return 'D';
+        else if (average >= 50) return 'E';
+        else return 'F';
+      }
+
+      getFinalResult(average) {
+        if (average >= 50 && this.attendance >= 75) {
+          return 'ناجح';
+        }
+        return 'يحتاج مراجعة';
+      }
+    }
+
+    const studentsList = [
+      new Student(1001, 'عبدالله محمد', [95, 91, 94], 96),
+      new Student(1002, 'سارة علي', [82, 85, 80], 70),
+      new Student(1003, 'محمود حسن', [45, 48, 47], 90),
+      new Student(1004, 'نور إبراهيم', [42, 44, 47], 70),
+    ];
+
+    // تقرير كل الطلاب
+    for (let i = 0; i < studentsList.length; i++) {
+      const student = studentsList[i];
+      const average = student.calculateAverage();
+
+      console.log('الاسم:', student.name);
+      console.log('المتوسط:', average);
+      console.log('التقدير:', student.getLetterGrade(average));
+      console.log('النتيجة:', student.getFinalResult(average));
+      console.log('--------------------');
+    }
+
+    // 1. استخراج الطلاب الذين متوسطهم من 40 إلى 49
+    const strugglingStudents = studentsList.filter(student => {
+      const average = student.calculateAverage();
+      return average >= 40 && average <= 49;
+    });
+
+    // 2. إضافة 5 درجات رأفة لمتوسط كل طالب
+    const upgradedGrades = strugglingStudents.map(student => student.calculateAverage() + 5);
+
+    // 3. جمع المتوسطات الجديدة بعد التعديل
+    const totalUpgraded = upgradedGrades.reduce((sum, grade) => sum + grade, 0);
+
+    // 4. حساب المتوسط مع درع الحماية
+    let upgradedAverage = 0;
+    if (strugglingStudents.length > 0) {
+      upgradedAverage = totalUpgraded / strugglingStudents.length;
+    }
+
+    console.log('الطلاب المتعثرون الذين شملتهم الرأفة:', strugglingStudents);
+    console.log('متوسطات الطلاب بعد إضافة الرأفة:', upgradedGrades);
+    console.log('متوسط الطلاب بعد الرأفة:', upgradedAverage);
+  </script>
+</body>
+</html>
+
